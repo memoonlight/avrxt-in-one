@@ -70,10 +70,22 @@ export async function deleteMessage(id: string) {
 
 export async function signInWithGithub() {
     const supabase = await createClient();
+
+    // Dynamically detect origin to prevent "undefined" errors if ENV is missing
+    let origin = process.env.NEXT_PUBLIC_API_URL;
+
+    if (!origin) {
+        const { headers } = await import('next/headers');
+        const headerList = await headers();
+        const host = headerList.get('host');
+        const protocol = host?.includes('localhost') ? 'http' : 'https';
+        origin = `${protocol}://${host}`;
+    }
+
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_API_URL}/auth/callback?next=/guestbook`,
+            redirectTo: `${origin}/auth/callback?next=/guestbook`,
         },
     });
 
