@@ -294,7 +294,13 @@ export default function MeClient({ initialConfig }: MeClientProps) {
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span className="font-mono text-[11px] tracking-[0.3em] text-zinc-500 uppercase">All Systems Online</span>
                     </div>
-                    <p className="text-[10px] text-zinc-700 font-mono uppercase tracking-widest">&copy; {new Date().getFullYear()} avrxt.in</p>
+                    <div className="flex items-center justify-center gap-4 text-[10px] text-zinc-700 font-mono uppercase tracking-widest mt-2">
+                        <span>&copy; {new Date().getFullYear()} avrxt.in</span>
+                        <span className="text-zinc-800">|</span>
+                        <Link href="/me/admin" className="text-zinc-800 hover:text-zinc-500 transition-colors">
+                            ADMIN
+                        </Link>
+                    </div>
                 </footer>
             </div>
 
