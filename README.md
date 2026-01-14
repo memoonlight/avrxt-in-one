@@ -86,6 +86,5 @@ This project is optimized for **Vercel Automation**. Every push to the `main` br
 
 ---
 
-**Designed by [@error](https://github.com/error)**  
-**Developed by [@avrxt](https://github.com/aeroaviorxt)**  
+**Designed and Developed by [@avrxt](https://instagram.com/aviorxt)**  
 Built with 🖤
