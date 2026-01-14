@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
         const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
         if (privateKey && process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.INTAKE_SHEET_ID) {
-            const auth = new google.auth.JWT(
+            const auth = new (google.auth.JWT as any)(
                 process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
                 undefined,
                 privateKey,
