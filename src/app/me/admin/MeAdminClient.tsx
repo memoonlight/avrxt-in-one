@@ -11,6 +11,8 @@ import {
 import { MeConfig } from '@/lib/me-config';
 import { saveMeConfigAction } from '@/app/actions/me';
 import { logout } from '@/app/actions/auth';
+import { createClient } from '@/utils/supabase/client';
+import { Upload } from 'lucide-react';
 
 interface MeAdminClientProps {
     initialConfig: MeConfig;
@@ -34,6 +36,43 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
             setTimeout(() => setSaveStatus(''), 3000);
         }
         setIsPending(false);
+    };
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'avatarUrl' | 'logoUrl' | 'bannerUrl' | 'coverUrl' = 'avatarUrl') => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsPending(true);
+        setSaveStatus('UPLOADING...');
+
+        try {
+            const supabase = createClient();
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${field}-${Date.now()}.${fileExt}`;
+            const filePath = `${fileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('images')
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data } = supabase.storage.from('images').getPublicUrl(filePath);
+
+            if (field === 'coverUrl') {
+                setConfig({ ...config, music: { ...config.music, coverUrl: data.publicUrl } });
+            } else {
+                setConfig({ ...config, profile: { ...config.profile, [field]: data.publicUrl } });
+            }
+
+            setSaveStatus('SUCCESS: UPLOAD_COMPLETE');
+        } catch (error: any) {
+            console.error('Upload error:', error);
+            setSaveStatus('ERROR: UPLOAD_FAILED');
+        } finally {
+            setIsPending(false);
+            setTimeout(() => setSaveStatus(''), 2000);
+        }
     };
 
     return (
@@ -126,6 +165,19 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                                     className="admin-input"
                                     placeholder="Avatar URL"
                                 />
+                                <div className="flex items-center gap-2">
+                                    <label className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg cursor-pointer transition-all border border-white/5">
+                                        <Upload size={12} className="text-zinc-400" />
+                                        <span className="text-[10px] font-mono font-bold text-zinc-300">UPLOAD_IMG</span>
+                                        <input
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={(e) => handleFileUpload(e, 'avatarUrl')}
+                                        />
+                                    </label>
+                                    <span className="text-[10px] text-zinc-600 font-mono">Bucket: images</span>
+                                </div>
                                 <input
                                     type="text"
                                     value={config.profile.logoUrl || ''}
