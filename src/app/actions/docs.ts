@@ -37,6 +37,22 @@ export async function getPublishedDocs() {
     return data as DocArticle[];
 }
 
+export async function getDocBySlug(slug: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('documents')
+        .select('*')
+        .eq('slug', slug)
+        .single(); // Assuming slug is unique
+
+    if (error) {
+        // console.error('Error fetching doc by slug:', error);
+        return null;
+    }
+
+    return data as DocArticle;
+}
+
 export async function createDocAction(doc: Partial<DocArticle>) {
     const supabase = await createClient();
 
