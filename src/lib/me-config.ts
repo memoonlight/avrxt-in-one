@@ -11,9 +11,9 @@ export interface MeConfig {
         handle: string;
         bio: string;
         avatarUrl: string;
-        logoUrl?: string;
+        logoUrl?: string; // nav logo
         bannerUrl?: string; // for gallery card
-        themeColor?: string; // hex code
+        themeColor?: string; // for buttons
     };
     music: {
         title: string;
@@ -32,7 +32,7 @@ export interface MeConfig {
     }[];
 }
 
-export const defaultConfig: MeConfig = {
+export const defaultMeConfig: MeConfig = {
     profile: {
         handle: "@avrxt",
         bio: "It's Just ?",
@@ -59,23 +59,3 @@ export const defaultConfig: MeConfig = {
         { id: 'r3', title: 'Rethinking Email Infrastructure', url: '/docs/avrxt-resend-2025', type: 'post', previewUrl: 'https://www.avrxt.in/assets/screenshot-zoom-analytics.webp', meta: 'avrxt-resend-2025' }
     ]
 };
-
-// Client-side helper to get/save config
-export function getMeConfig(): MeConfig {
-    if (typeof window === 'undefined') return defaultConfig;
-    const saved = localStorage.getItem('avrxt_me_config');
-    if (saved) {
-        try {
-            return JSON.parse(saved);
-        } catch (e) {
-            return defaultConfig;
-        }
-    }
-    return defaultConfig;
-}
-
-export function saveMeConfig(config: MeConfig) {
-    if (typeof window !== 'undefined') {
-        localStorage.setItem('avrxt_me_config', JSON.stringify(config));
-    }
-}
