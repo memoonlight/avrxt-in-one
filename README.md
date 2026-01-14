@@ -10,6 +10,7 @@ A high-performance, premium personal website built with **Next.js 15**, **Supaba
 - **Documentation Portal (`/docs`)**: Dynamic, SEO-optimized documentation system powered by Supabase.
 - **Admin Dashboards**: Integrated management tools for profiles and documents at `/me/admin` and `/docs/admin`.
 - **Media Engine**: Supabase Storage integration for uploading avatars, banners, music, and gallery items directly from the dashboard.
+- **Edge Delivery**: Optimized with **Amazon CloudFront CDN** for lightning-fast asset delivery globally.
 - **Enterprise Integrations**:
   - **Google Sheets**: Automatic lead capture for Contact and Hire Me forms.
   - **Resend**: Transactional emails and newsletter subscriptions.
@@ -19,6 +20,8 @@ A high-performance, premium personal website built with **Next.js 15**, **Supaba
 
 - **Framework**: Next.js 15 (App Router)
 - **Database/Auth**: Supabase (PostgreSQL + Auth + Storage)
+- **CDN**: Amazon CloudFront
+- **Hosting**: Vercel (CI/CD Automation)
 - **Styling**: Tailwind CSS + Lucide Icons
 - **Integrations**: Google Sheets API, Resend, Nodemailer.
 
@@ -26,10 +29,11 @@ A high-performance, premium personal website built with **Next.js 15**, **Supaba
 
 ```mermaid
 graph TD
-    User((User)) -->|Public Access| WebApp[Next.js Application]
+    User((User)) -->|Public Access| CF[Amazon CloudFront CDN]
+    CF -->|Static Cache| Vercel[Vercel Hosting]
     Admin((Admin)) -->|Auth Access| AdminPanels[Admin Dashboards]
     
-    WebApp -->|Fetch Data| EdgeFunctions[App Router / Server Actions]
+    Vercel -->|Server Side Rendering| EdgeFunctions[App Router / Server Actions]
     AdminPanels -->|Mutate Data| EdgeFunctions
     
     EdgeFunctions -->|Persistence| SupabaseDB[(Supabase DB)]
@@ -38,6 +42,7 @@ graph TD
     EdgeFunctions -->|Notifications| Resend[(Resend Email)]
     
     SupabaseDB -->|Docs/Config| EdgeFunctions
+    SupabaseStorage -->|Media| CF
 ```
 
 ## ⚙️ Environment Configuration
@@ -77,8 +82,10 @@ Access the admin panels via `/docs/login`. Once authenticated, you can toggle be
 
 ## 🛠️ Deployment
 
-This project is optimized for **Vercel**. Ensure all environment variables are added to the Vercel Project Settings before deployment.
+This project is optimized for **Vercel Automation**. Every push to the `main` branch triggers an automatic build and deployment. Assets are cached and served via **Amazon CloudFront** for maximum performance.
 
 ---
 
-Built with 🖤 by **avrxt**.
+**Designed by [@error](https://github.com/error)**  
+**Developed by [@avrxt](https://github.com/aeroaviorxt)**  
+Built with 🖤

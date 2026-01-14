@@ -14,7 +14,6 @@ create policy "Authenticated Update"
   on storage.objects for update
   to authenticated
   using ( bucket_id = 'images' );
-
 create policy "Authenticated Delete"
   on storage.objects for delete
   to authenticated
