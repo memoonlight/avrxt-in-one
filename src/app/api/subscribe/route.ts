@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || 're_123');
 const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID || 'c21420ff-8ed5-4385-a588-6ec40c384fa7';
 
 // Helper to enforce the 4-second processing time
