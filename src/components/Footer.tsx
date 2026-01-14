@@ -1,8 +1,17 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Github, Mail, Instagram } from 'lucide-react';
 
 export default function Footer() {
+    const pathname = usePathname();
     const year = new Date().getFullYear();
+
+    // Hide footer on /me routes
+    if (pathname.startsWith('/me')) {
+        return null;
+    }
 
     return (
         <footer className="py-12 border-t border-white/5 bg-zinc-900/30 backdrop-blur-sm">

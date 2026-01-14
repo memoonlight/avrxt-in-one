@@ -2,11 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname();
+
+    // Hide navbar on /me routes
+    if (pathname.startsWith('/me')) {
+        return null;
+    }
 
     const navLinks = [
         { name: '/about', href: '/#about' },
