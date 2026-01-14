@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# avrxt | Full-Stack Infrastructure & Personal Engine
 
-## Getting Started
+![avrxt](https://cdn.avrxt.in/assets/logo-02.png)
 
-First, run the development server:
+A high-performance, premium personal website built with **Next.js 15**, **Supabase**, and **Tailwind CSS**. Designed for speed, security, and absolute control.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Key Features
+
+- **Personal Profile (`/me`)**: Standalone, immersive "Link in Bio" page with live status, music player, and visual feed.
+- **Documentation Portal (`/docs`)**: Dynamic, SEO-optimized documentation system powered by Supabase.
+- **Admin Dashboards**: Integrated management tools for profiles and documents at `/me/admin` and `/docs/admin`.
+- **Media Engine**: Supabase Storage integration for uploading avatars, banners, music, and gallery items directly from the dashboard.
+- **Enterprise Integrations**:
+  - **Google Sheets**: Automatic lead capture for Contact and Hire Me forms.
+  - **Resend**: Transactional emails and newsletter subscriptions.
+  - **Supabase Auth**: Secure, role-based access to administrative tools.
+
+## 🛠️ Technology Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Database/Auth**: Supabase (PostgreSQL + Auth + Storage)
+- **Styling**: Tailwind CSS + Lucide Icons
+- **Integrations**: Google Sheets API, Resend, Nodemailer.
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    User((User)) -->|Public Access| WebApp[Next.js Application]
+    Admin((Admin)) -->|Auth Access| AdminPanels[Admin Dashboards]
+    
+    WebApp -->|Fetch Data| EdgeFunctions[App Router / Server Actions]
+    AdminPanels -->|Mutate Data| EdgeFunctions
+    
+    EdgeFunctions -->|Persistence| SupabaseDB[(Supabase DB)]
+    EdgeFunctions -->|Asset Storage| SupabaseStorage[(Supabase Storage)]
+    EdgeFunctions -->|Lead Capture| GSheets[(Google Sheets)]
+    EdgeFunctions -->|Notifications| Resend[(Resend Email)]
+    
+    SupabaseDB -->|Docs/Config| EdgeFunctions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚙️ Environment Configuration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file with the following keys:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
-## Learn More
+# Google Integration (Lead Capture)
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your_email
+GOOGLE_PRIVATE_KEY="---BEGIN PRIVATE KEY---\n..."
+GOOGLE_SHEET_ID=your_sheet_id
+INTAKE_SHEET_ID=your_intake_sheet_id
 
-To learn more about Next.js, take a look at the following resources:
+# Email (Resend)
+RESEND_API_KEY=re_...
+RESEND_AUDIENCE_ID=...
+RESEND_FROM_EMAIL=updates@yourdomain.com
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Email (Gmail Backup)
+GMAIL_APP_PASSWORD=...
+ADMIN_GMAIL_ID=...
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# App URL
+NEXT_PUBLIC_API_URL=https://yourdomain.com
+```
 
-## Deploy on Vercel
+## 🔐 Administrative Access
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Access the admin panels via `/docs/login`. Once authenticated, you can toggle between:
+- **Profile Admin**: Edit `/me` content, status, and gallery.
+- **Docs Admin**: Create, edit, and publish documentation.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Deployment
+
+This project is optimized for **Vercel**. Ensure all environment variables are added to the Vercel Project Settings before deployment.
+
+---
+
+Built with 🖤 by **avrxt**.

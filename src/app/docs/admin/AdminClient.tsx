@@ -111,14 +111,14 @@ export default function AdminClient({ initialDocs, userEmail }: AdminClientProps
         <main className="min-h-screen bg-[#0a0a0a] text-white selection:bg-white/10">
             {/* Header */}
             <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
-                <nav className="max-w-[1800px] mx-auto px-6 h-16 flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                        <BookOpen className="w-6 h-6 text-blue-500" />
-                        <h1 className="text-lg font-bold tracking-tighter uppercase font-mono">Docs_Publisher</h1>
-                        <span className="text-[10px] text-zinc-600 font-mono">v3.0 (Supabase)</span>
+                <nav className="max-w-[1800px] mx-auto px-6 h-auto min-h-16 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="flex items-center gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+                        <BookOpen className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                        <h1 className="text-lg font-bold tracking-tighter uppercase font-mono whitespace-nowrap">Docs_Publisher</h1>
+                        <span className="text-[10px] text-zinc-600 font-mono whitespace-nowrap">v3.0 (Supabase)</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <span className="text-[10px] text-zinc-500 font-mono mr-4 hidden md:inline">
+                    <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 w-full md:w-auto">
+                        <span className="text-[10px] text-zinc-500 font-mono hidden lg:inline">
                             USER: {userEmail}
                         </span>
                         <Link
@@ -126,23 +126,20 @@ export default function AdminClient({ initialDocs, userEmail }: AdminClientProps
                             target="_blank"
                             className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 hover:bg-zinc-700 text-zinc-400 hover:text-white rounded-full text-[10px] font-bold font-mono transition-all border border-white/5"
                         >
-                            <Eye size={12} /> PREVIEW_LIVE
+                            <Eye size={12} /> PREVIEW
                         </Link>
                         <Link
                             href="/me/admin"
                             className="flex items-center gap-2 px-4 py-2 bg-purple-900/20 hover:bg-purple-900/40 text-purple-400 hover:text-purple-300 rounded-full text-[10px] font-bold font-mono transition-all border border-purple-500/20"
                         >
-                            PROFILE_ADMIN
+                            PROFILE
                         </Link>
                         <button
                             onClick={handleSave}
                             disabled={isPending || !selectedDoc}
                             className="flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-full text-xs font-bold font-mono transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)]"
                         >
-                            <Save size={14} /> {isPending ? 'SYNCING...' : 'SAVE_CHANGES'}
-                        </button>
-                        <button onClick={() => logout()} className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full text-xs font-bold font-mono transition-all">
-                            <LogOut size={14} /> EXIT
+                            <Save size={14} /> {isPending ? 'SYNCING...' : 'SAVE'}
                         </button>
                     </div>
                 </nav>
@@ -155,9 +152,9 @@ export default function AdminClient({ initialDocs, userEmail }: AdminClientProps
                 </div>
             )}
 
-            <div className="max-w-[1800px] mx-auto p-6 flex gap-6">
+            <div className="max-w-[1800px] mx-auto p-6 flex flex-col lg:flex-row gap-6">
                 {/* Sidebar - Document List */}
-                <aside className="w-80 flex-shrink-0 space-y-4">
+                <aside className="w-full lg:w-80 flex-shrink-0 space-y-4">
                     {/* Search & Filter */}
                     <div className="p-4 rounded-2xl bg-zinc-900/40 border border-white/5 space-y-3">
                         <div className="relative">

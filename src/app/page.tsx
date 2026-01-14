@@ -10,7 +10,7 @@ export default function Home() {
       {/* Hero Section */}
       <Reveal className="pt-48 pb-32 active">
         <div className="max-w-4xl">
-          <h1 className="text-6xl md:text-8xl font-black leading-[0.95] tracking-tighter mb-10 gradient-heading">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black leading-[0.95] tracking-tighter mb-10 gradient-heading">
             Building Scalable, Secure, & Beautiful Digital Solutions.
           </h1>
 
