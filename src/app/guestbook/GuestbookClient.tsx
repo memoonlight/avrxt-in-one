@@ -28,21 +28,26 @@ export default function GuestbookClient({ user, initialMessages }: { user: User 
         else if (url) window.location.href = url;
     };
 
+    const handleSignOut = async () => {
+        const { logout } = await import('@/app/actions/auth');
+        await logout();
+        window.location.reload();
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || !user) return;
 
         setIsSubmitting(true);
-        const name = user.user_metadata.full_name || user.user_metadata.user_name || 'Anonymous';
-        const avatar = user.user_metadata.avatar_url;
+        // Better fallback for names and avatars
+        const name = user.user_metadata.full_name || user.user_metadata.user_name || user.email?.split('@')[0] || 'Anonymous';
+        const avatar = user.user_metadata.avatar_url || `https://ui-avatars.com/api/?name=${name}&background=random&color=fff`;
 
         const result = await postMessage(input, name, avatar);
         if (result.error) {
             alert(result.error);
         } else {
             setInput('');
-            // Optimistic update or wait for revalidate would be better, 
-            // but for simplicity we'll just reload or the user will see it on refresh
             window.location.reload();
         }
         setIsSubmitting(false);
@@ -80,23 +85,39 @@ export default function GuestbookClient({ user, initialMessages }: { user: User 
                     </button>
                 </div>
             ) : (
-                <form onSubmit={handleSubmit} className="p-1 gap-2 flex flex-col sm:flex-row items-stretch">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Type your message..."
-                        className="flex-1 bg-zinc-900/50 border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-white/20 transition-all font-mono text-sm"
-                        maxLength={200}
-                    />
-                    <button
-                        type="submit"
-                        disabled={isSubmitting || !input.trim()}
-                        className="px-6 py-3 bg-white text-black rounded-xl font-bold hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shrink-0"
-                    >
-                        {isSubmitting ? '...' : <><Send size={16} /> Post</>}
-                    </button>
-                </form>
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between px-2">
+                        <div className="flex items-center gap-2">
+                            <img
+                                src={user.user_metadata.avatar_url || `https://ui-avatars.com/api/?name=${user.email}&background=random`}
+                                className="w-5 h-5 rounded-full border border-white/10"
+                            />
+                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                                Posting as <span className="text-zinc-300">{user.user_metadata.full_name || user.email}</span>
+                            </span>
+                        </div>
+                        <button onClick={handleSignOut} className="text-[9px] font-mono text-zinc-600 hover:text-white uppercase transition-colors">
+                            [ Sign_Out ]
+                        </button>
+                    </div>
+                    <form onSubmit={handleSubmit} className="p-1 gap-2 flex flex-col sm:flex-row items-stretch">
+                        <input
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Type your message..."
+                            className="flex-1 bg-zinc-900/50 border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-white/20 transition-all font-mono text-sm"
+                            maxLength={200}
+                        />
+                        <button
+                            type="submit"
+                            disabled={isSubmitting || !input.trim()}
+                            className="px-6 py-3 bg-white text-black rounded-xl font-bold hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shrink-0"
+                        >
+                            {isSubmitting ? '...' : <><Send size={16} /> Post</>}
+                        </button>
+                    </form>
+                </div>
             )}
 
             {/* Messages List */}
