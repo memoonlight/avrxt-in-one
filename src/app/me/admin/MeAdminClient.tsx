@@ -108,28 +108,28 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                             <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Connected_To_Node: avrxt-core-01</span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center justify-start md:justify-end gap-3 w-full md:w-auto">
                         <Link
                             href="/me"
                             target="_blank"
                             className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 hover:bg-zinc-700 text-zinc-400 hover:text-white rounded-full text-[10px] font-bold font-mono transition-all border border-white/5"
                         >
-                            <Eye size={12} /> PREVIEW_LIVE
+                            <Eye size={12} /> PREVIEW
                         </Link>
                         <Link
                             href="/docs/admin"
                             className="flex items-center gap-2 px-4 py-2 bg-blue-900/20 hover:bg-blue-900/40 text-blue-400 hover:text-blue-300 rounded-full text-[10px] font-bold font-mono transition-all border border-blue-500/20"
                         >
-                            DOCS_ADMIN
+                            DOCS
                         </Link>
                         <button
                             onClick={handleSave}
                             disabled={isPending}
                             className="flex items-center gap-2 px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full text-xs font-bold font-mono transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] disabled:opacity-50"
                         >
-                            <Save size={14} /> {isPending ? 'SYNCING...' : 'SAVE_CHANGES'}
+                            <Save size={14} /> {isPending ? 'SYNCING...' : 'SAVE'}
                         </button>
-                        <button onClick={() => logout()} className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full text-xs font-bold font-mono transition-all">
+                        <button onClick={() => logout()} className="flex items-center gap-2 px-3 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full text-xs font-bold font-mono transition-all">
                             <LogOut size={14} /> EXIT
                         </button>
                     </div>
