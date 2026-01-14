@@ -6,7 +6,7 @@ import {
     Plus, Trash2, Save, LogOut,
     Music, Link as LinkIcon, Book,
     Check, ArrowUp, ArrowDown,
-    User, Eye, AlertCircle
+    User, Eye, AlertCircle, Camera
 } from 'lucide-react';
 import { MeConfig } from '@/lib/me-config';
 import { saveMeConfigAction } from '@/app/actions/me';
@@ -38,7 +38,7 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
         setIsPending(false);
     };
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'avatarUrl' | 'logoUrl' | 'bannerUrl' | 'coverUrl' = 'avatarUrl') => {
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, target: string, galleryType?: 'image' | 'video') => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -48,8 +48,13 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
         try {
             const supabase = createClient();
             const fileExt = file.name.split('.').pop();
-            const fileName = `${field}-${Date.now()}.${fileExt}`;
+            const fileName = `${target.replace('.', '-')}-${Date.now()}.${fileExt}`;
             const filePath = `${fileName}`;
+
+            // Check file size for audio/video (limit 50MB for now to be safe)
+            if (file.size > 50 * 1024 * 1024) {
+                throw new Error("File too large (Max 50MB)");
+            }
 
             const { error: uploadError } = await supabase.storage
                 .from('images')
@@ -58,17 +63,30 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
             if (uploadError) throw uploadError;
 
             const { data } = supabase.storage.from('images').getPublicUrl(filePath);
+            const publicUrl = data.publicUrl;
 
-            if (field === 'coverUrl') {
-                setConfig({ ...config, music: { ...config.music, coverUrl: data.publicUrl } });
-            } else {
-                setConfig({ ...config, profile: { ...config.profile, [field]: data.publicUrl } });
+            if (target === 'gallery') {
+                // Add new gallery item
+                const newItem = {
+                    id: Date.now().toString(),
+                    type: galleryType || 'image',
+                    url: publicUrl,
+                    caption: 'New Upload'
+                };
+                setConfig({ ...config, gallery: [...(config.gallery || []), newItem] });
+            } else if (target === 'music.coverUrl') {
+                setConfig({ ...config, music: { ...config.music, coverUrl: publicUrl } });
+            } else if (target === 'music.audioUrl') {
+                setConfig({ ...config, music: { ...config.music, audioUrl: publicUrl } });
+            } else if (target.startsWith('profile.')) {
+                const field = target.split('.')[1] as keyof typeof config.profile;
+                setConfig({ ...config, profile: { ...config.profile, [field]: publicUrl } });
             }
 
             setSaveStatus('SUCCESS: UPLOAD_COMPLETE');
         } catch (error: any) {
             console.error('Upload error:', error);
-            setSaveStatus('ERROR: UPLOAD_FAILED');
+            setSaveStatus(`ERROR: ${error.message || 'UPLOAD_FAILED'}`);
         } finally {
             setIsPending(false);
             setTimeout(() => setSaveStatus(''), 2000);
@@ -168,15 +186,14 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                                 <div className="flex items-center gap-2">
                                     <label className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg cursor-pointer transition-all border border-white/5">
                                         <Upload size={12} className="text-zinc-400" />
-                                        <span className="text-[10px] font-mono font-bold text-zinc-300">UPLOAD_IMG</span>
+                                        <span className="text-[10px] font-mono font-bold text-zinc-300">UPLOAD_AVATAR</span>
                                         <input
                                             type="file"
                                             className="hidden"
                                             accept="image/*"
-                                            onChange={(e) => handleFileUpload(e, 'avatarUrl')}
+                                            onChange={(e) => handleFileUpload(e, 'profile.avatarUrl')}
                                         />
                                     </label>
-                                    <span className="text-[10px] text-zinc-600 font-mono">Bucket: images</span>
                                 </div>
                                 <input
                                     type="text"
@@ -192,6 +209,18 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                                     className="admin-input"
                                     placeholder="Gallery Banner URL"
                                 />
+                                <div className="flex items-center gap-2">
+                                    <label className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg cursor-pointer transition-all border border-white/5">
+                                        <Upload size={12} className="text-zinc-400" />
+                                        <span className="text-[10px] font-mono font-bold text-zinc-300">UPLOAD_BANNER</span>
+                                        <input
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={(e) => handleFileUpload(e, 'profile.bannerUrl')}
+                                        />
+                                    </label>
+                                </div>
                                 <div className="flex gap-2">
                                     <input
                                         type="text"
@@ -204,6 +233,49 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                                         className="w-12 h-12 rounded-xl border border-white/10"
                                         style={{ backgroundColor: config.profile.themeColor || '#fff' }}
                                     ></div>
+                                </div>
+
+                                {/* Status Settings */}
+                                <div className="pt-4 border-t border-white/5 space-y-3">
+                                    <label className="text-[10px] text-zinc-500 uppercase tracking-widest block">Current Status</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={config.profile.status?.text || ''}
+                                            onChange={(e) => setConfig({
+                                                ...config,
+                                                profile: {
+                                                    ...config.profile,
+                                                    status: {
+                                                        text: e.target.value,
+                                                        color: config.profile.status?.color || 'green'
+                                                    }
+                                                }
+                                            })}
+                                            className="admin-input flex-1"
+                                            placeholder="Status (e.g. Busy)"
+                                        />
+                                        <select
+                                            value={config.profile.status?.color || 'green'}
+                                            onChange={(e) => setConfig({
+                                                ...config,
+                                                profile: {
+                                                    ...config.profile,
+                                                    status: {
+                                                        text: config.profile.status?.text || '',
+                                                        color: e.target.value as any
+                                                    }
+                                                }
+                                            })}
+                                            className="bg-zinc-900 border border-white/5 rounded-lg px-2 text-xs font-mono text-zinc-300 outline-none"
+                                        >
+                                            <option value="green">Green</option>
+                                            <option value="yellow">Yellow</option>
+                                            <option value="red">Red</option>
+                                            <option value="blue">Blue</option>
+                                            <option value="purple">Purple</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -235,6 +307,18 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                                     className="admin-input"
                                     placeholder="Cover Image URL"
                                 />
+                                <div className="flex items-center gap-2">
+                                    <label className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg cursor-pointer transition-all border border-white/5">
+                                        <Upload size={12} className="text-zinc-400" />
+                                        <span className="text-[10px] font-mono font-bold text-zinc-300">UPLOAD_COVER</span>
+                                        <input
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={(e) => handleFileUpload(e, 'music.coverUrl')}
+                                        />
+                                    </label>
+                                </div>
                                 <input
                                     type="text"
                                     value={config.music.audioUrl}
@@ -242,6 +326,19 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                                     className="admin-input"
                                     placeholder="Audio File URL (Direct mp3)"
                                 />
+                                <div className="flex items-center gap-2">
+                                    <label className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg cursor-pointer transition-all border border-white/5">
+                                        <Upload size={12} className="text-zinc-400" />
+                                        <span className="text-[10px] font-mono font-bold text-zinc-300">UPLOAD_AUDIO</span>
+                                        <input
+                                            type="file"
+                                            className="hidden"
+                                            accept=".mp3,.wav,.m4a"
+                                            onChange={(e) => handleFileUpload(e, 'music.audioUrl')}
+                                        />
+                                    </label>
+                                    <span className="text-[10px] text-zinc-600 font-mono">Max 50MB</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -471,9 +568,95 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <style jsx global>{`
+                    {/* Gallery Settings (New) */}
+                    <div className="p-6 rounded-2xl bg-zinc-900/40 border border-white/5 space-y-4">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-sm font-bold uppercase tracking-widest flex items-center gap-2 font-mono">
+                                <Camera size={16} className="text-zinc-500" /> Gallery
+                            </h2>
+                            <div className="flex gap-2">
+                                <label className="text-[10px] font-mono px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 transition-all font-bold border border-white/10 uppercase tracking-tighter cursor-pointer flex items-center gap-2">
+                                    <Upload size={10} /> ADD_IMG
+                                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'gallery', 'image')} />
+                                </label>
+                                <label className="text-[10px] font-mono px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 transition-all font-bold border border-white/10 uppercase tracking-tighter cursor-pointer flex items-center gap-2">
+                                    <Upload size={10} /> ADD_VID
+                                    <input type="file" className="hidden" accept="video/*" onChange={(e) => handleFileUpload(e, 'gallery', 'video')} />
+                                </label>
+                            </div>
+                        </div>
+                        <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
+                            {(config.gallery || []).map((item, idx) => (
+                                <div key={item.id} className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-3 group hover:border-white/20 transition-all">
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex flex-col gap-0.5">
+                                                <button
+                                                    disabled={idx === 0}
+                                                    onClick={() => {
+                                                        const newGal = [...(config.gallery || [])];
+                                                        [newGal[idx], newGal[idx - 1]] = [newGal[idx - 1], newGal[idx]];
+                                                        setConfig({ ...config, gallery: newGal });
+                                                    }}
+                                                    className="p-0.5 hover:bg-white/10 rounded text-zinc-600 disabled:opacity-0"
+                                                >
+                                                    <ArrowUp size={10} />
+                                                </button>
+                                                <button
+                                                    disabled={idx === (config.gallery || []).length - 1}
+                                                    onClick={() => {
+                                                        const newGal = [...(config.gallery || [])];
+                                                        [newGal[idx], newGal[idx + 1]] = [newGal[idx + 1], newGal[idx]];
+                                                        setConfig({ ...config, gallery: newGal });
+                                                    }}
+                                                    className="p-0.5 hover:bg-white/10 rounded text-zinc-600 disabled:opacity-0"
+                                                >
+                                                    <ArrowDown size={10} />
+                                                </button>
+                                            </div>
+                                            <span className="text-[10px] font-bold uppercase text-zinc-500">{item.type}</span>
+                                        </div>
+                                        <button
+                                            onClick={() => setConfig({ ...config, gallery: config.gallery?.filter(i => i.id !== item.id) })}
+                                            className="text-white/20 hover:text-red-500 transition-all opacity-40 group-hover:opacity-100 p-1"
+                                        >
+                                            <Trash2 size={12} />
+                                        </button>
+                                    </div>
+                                    {item.type === 'image' ? (
+                                        <img src={item.url} className="w-full h-24 object-cover rounded-lg border border-white/5" />
+                                    ) : (
+                                        <video src={item.url} className="w-full h-24 object-cover rounded-lg border border-white/5" controls />
+                                    )}
+                                    <input
+                                        className="admin-input py-1.5 text-[10px] bg-zinc-900/50"
+                                        value={item.caption || ''}
+                                        onChange={(e) => {
+                                            const newGal = [...(config.gallery || [])];
+                                            newGal[idx] = { ...newGal[idx], caption: e.target.value };
+                                            setConfig({ ...config, gallery: newGal });
+                                        }}
+                                        placeholder="CAPTION / DESCRIPTION"
+                                    />
+                                    <input
+                                        className="admin-input py-1.5 text-[10px] bg-zinc-900/50"
+                                        value={item.url}
+                                        onChange={(e) => {
+                                            const newGal = [...(config.gallery || [])];
+                                            newGal[idx] = { ...newGal[idx], url: e.target.value };
+                                            setConfig({ ...config, gallery: newGal });
+                                        }}
+                                        placeholder="URL"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style jsx global>{`
            .admin-input {
              width: 100%;
              padding: 0.75rem 1rem;
@@ -501,7 +684,7 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
              border-radius: 99px;
            }
          `}</style>
-            </div>
-        </main>
+
+        </main >
     );
 }

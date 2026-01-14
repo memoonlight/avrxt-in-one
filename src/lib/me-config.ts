@@ -14,6 +14,10 @@ export interface MeConfig {
         logoUrl?: string; // nav logo
         bannerUrl?: string; // for gallery card
         themeColor?: string; // for buttons
+        status?: {
+            text: string; // "Busy", "Free", "Coding"
+            color: 'green' | 'yellow' | 'red' | 'blue' | 'purple';
+        };
     };
     music: {
         title: string;
@@ -22,6 +26,12 @@ export interface MeConfig {
         audioUrl: string;
     };
     links: MeLink[];
+    gallery: {
+        id: string;
+        type: 'image' | 'video';
+        url: string;
+        caption?: string;
+    }[];
     resources: {
         id: string;
         title: string;
@@ -39,7 +49,8 @@ export const defaultMeConfig: MeConfig = {
         avatarUrl: "https://objects.avrxt.in/assets/IMG_20251108_224641_264.webp",
         logoUrl: "https://cdn.avrxt.in/assets/logo-02.png",
         bannerUrl: "https://objects.avrxt.in/images/aviorxt_01.jpg",
-        themeColor: "#10b981"
+        themeColor: "#10b981",
+        status: { text: 'Online', color: 'green' }
     },
     music: {
         title: "her",
@@ -53,6 +64,7 @@ export const defaultMeConfig: MeConfig = {
         { id: '3', name: 'Discord', url: 'https://discord.com/users/1269352892146384957', icon: 'Discord', type: 'social' },
         { id: '4', name: 'Email', url: 'mailto:hey@avrxt.in', icon: 'Mail', type: 'social' }
     ],
+    gallery: [],
     resources: [
         { id: 'r1', title: 'Visual Gallery', url: '/gallery', type: 'gallery' },
         { id: 'r2', title: 'Documentation Portal', url: '/docs', type: 'doc' },

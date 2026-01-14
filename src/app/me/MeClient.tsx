@@ -129,6 +129,28 @@ export default function MeClient({ initialConfig }: MeClientProps) {
                     </div>
                     <h1 className="text-2xl font-bold font-mono tracking-[0.15em] uppercase text-white">{config.profile.handle}</h1>
                     <p className="text-sm font-light tracking-[0.2em] text-zinc-400 mt-3 uppercase italic">{config.profile.bio}</p>
+
+                    {/* Status Indicator */}
+                    {config.profile.status && config.profile.status.text && (
+                        <div className={cn(
+                            "mt-4 inline-flex items-center gap-2 px-3 py-1 rounded-full border bg-black/50 backdrop-blur-md",
+                            config.profile.status.color === 'green' && "border-emerald-500/30 text-emerald-400",
+                            config.profile.status.color === 'yellow' && "border-yellow-500/30 text-yellow-400",
+                            config.profile.status.color === 'red' && "border-red-500/30 text-red-400",
+                            config.profile.status.color === 'blue' && "border-blue-500/30 text-blue-400",
+                            config.profile.status.color === 'purple' && "border-purple-500/30 text-purple-400",
+                        )}>
+                            <span className={cn(
+                                "w-1.5 h-1.5 rounded-full animate-pulse",
+                                config.profile.status.color === 'green' && "bg-emerald-500",
+                                config.profile.status.color === 'yellow' && "bg-yellow-500",
+                                config.profile.status.color === 'red' && "bg-red-500",
+                                config.profile.status.color === 'blue' && "bg-blue-500",
+                                config.profile.status.color === 'purple' && "bg-purple-500",
+                            )}></span>
+                            <span className="text-[10px] font-mono uppercase tracking-widest">{config.profile.status.text}</span>
+                        </div>
+                    )}
                 </div>
 
                 {/* Social Links */}
@@ -190,6 +212,43 @@ export default function MeClient({ initialConfig }: MeClientProps) {
                         </div>
                     </div>
                 </div>
+
+                {/* Gallery Section */}
+                {config.gallery && config.gallery.length > 0 && (
+                    <div className="w-full mb-10 animate-fade-in" style={{ animationDelay: '0.45s' }}>
+                        <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-[0.2em] mb-3 ml-1 block">Visual_Feed</span>
+                        <div className="grid grid-cols-2 gap-3">
+                            {config.gallery.map((item) => (
+                                <div key={item.id} className="group relative aspect-square rounded-xl overflow-hidden border border-white/10 bg-zinc-900/50">
+                                    {item.type === 'video' ? (
+                                        <video
+                                            src={item.url}
+                                            className="w-full h-full object-cover"
+                                            controls={false}
+                                            muted
+                                            loop
+                                            playsInline
+                                            onMouseOver={e => e.currentTarget.play()}
+                                            onMouseOut={e => e.currentTarget.pause()}
+                                        />
+                                    ) : (
+                                        <img src={item.url} alt={item.caption} className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110" />
+                                    )}
+                                    {item.caption && (
+                                        <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <p className="text-[8px] font-mono text-white text-center uppercase tracking-widest truncate">{item.caption}</p>
+                                        </div>
+                                    )}
+                                    {item.type === 'video' && (
+                                        <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-black/50 backdrop-blur flex items-center justify-center border border-white/20 select-none pointer-events-none">
+                                            <Play size={6} className="fill-white text-white ml-0.5" />
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Resources Cards */}
                 <div className="w-full mb-10 animate-fade-in" style={{ animationDelay: '0.5s' }}>
