@@ -81,6 +81,10 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
             } else if (target.startsWith('profile.')) {
                 const field = target.split('.')[1] as keyof typeof config.profile;
                 setConfig({ ...config, profile: { ...config.profile, [field]: publicUrl } });
+            } else if (target.startsWith('link:')) {
+                const linkId = target.split(':')[1];
+                const newLinks = config.links.map(l => l.id === linkId ? { ...l, icon: publicUrl } : l);
+                setConfig({ ...config, links: newLinks });
             }
 
             setSaveStatus('SUCCESS: UPLOAD_COMPLETE');
@@ -414,10 +418,17 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                                         </div>
                                         <div className="flex gap-2">
                                             <select
-                                                value={link.icon || 'ExternalLink'}
+                                                value={link.icon?.startsWith('http') ? 'Image' : (link.icon || 'ExternalLink')}
                                                 onChange={(e) => {
                                                     const newLinks = [...config.links];
-                                                    newLinks[idx] = { ...newLinks[idx], icon: e.target.value };
+                                                    const val = e.target.value;
+                                                    // If switching to Image, current val might be a name. If switching away, set to name.
+                                                    if (val === 'Image') {
+                                                        // Keep current if it is a URL, else empty
+                                                        newLinks[idx] = { ...newLinks[idx], icon: link.icon?.startsWith('http') ? link.icon : '' };
+                                                    } else {
+                                                        newLinks[idx] = { ...newLinks[idx], icon: val };
+                                                    }
                                                     setConfig({ ...config, links: newLinks });
                                                 }}
                                                 className="bg-zinc-900 border border-white/5 rounded-lg px-2 py-1 text-[10px] font-mono text-zinc-400 outline-none focus:border-white/20"
@@ -430,7 +441,32 @@ export default function MeAdminClient({ initialConfig }: MeAdminClientProps) {
                                                 <option value="BookOpen">BookOpen</option>
                                                 <option value="ExternalLink">External</option>
                                                 <option value="Share2">Share</option>
+                                                <option value="Image">CUSTOM IMG</option>
                                             </select>
+
+                                            {(link.icon === 'Image' || link.icon?.startsWith('http') || link.icon === '' && config.links[idx].icon === '') && (
+                                                <div className="flex items-center gap-1">
+                                                    <input
+                                                        className="bg-zinc-900/50 border border-white/5 rounded-lg px-2 py-1 text-[10px] w-20"
+                                                        value={link.icon}
+                                                        onChange={(e) => {
+                                                            const newLinks = [...config.links];
+                                                            newLinks[idx] = { ...newLinks[idx], icon: e.target.value };
+                                                            setConfig({ ...config, links: newLinks });
+                                                        }}
+                                                        placeholder="ICON_URL"
+                                                    />
+                                                    <label className="p-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg cursor-pointer border border-white/5">
+                                                        <Upload size={10} className="text-zinc-400" />
+                                                        <input
+                                                            type="file"
+                                                            className="hidden"
+                                                            accept="image/*"
+                                                            onChange={(e) => handleFileUpload(e, `link:${link.id}`)}
+                                                        />
+                                                    </label>
+                                                </div>
+                                            )}
                                             <input
                                                 className="bg-zinc-900/50 border border-white/5 rounded-lg px-3 py-1.5 text-[10px] font-mono text-zinc-400 focus:text-white outline-none flex-1 focus:border-white/20 transition-all"
                                                 value={link.url}

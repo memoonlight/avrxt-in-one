@@ -158,7 +158,8 @@ export default function MeClient({ initialConfig }: MeClientProps) {
                     <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-[0.2em] mb-3 ml-1 block">Social_Connections</span>
                     <div className="space-y-3">
                         {config.links.map((link, idx) => {
-                            const Icon = iconMap[link.icon || 'ExternalLink'] || ExternalLink;
+                            const isCustomIcon = link.icon && (link.icon.startsWith('http') || link.icon.startsWith('/') || link.icon.startsWith('data:'));
+
                             if (link.icon === 'Discord' || link.name === 'Discord') {
                                 return (
                                     <Link key={link.id} href={link.url} target="_blank" className="link-card flex items-center p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl hover:bg-white/[0.07] transition-all">
@@ -167,9 +168,16 @@ export default function MeClient({ initialConfig }: MeClientProps) {
                                     </Link>
                                 );
                             }
+
+                            const Icon = !isCustomIcon ? (iconMap[link.icon || 'ExternalLink'] || ExternalLink) : null;
+
                             return (
                                 <Link key={link.id} href={link.url} target={link.url.startsWith('mailto') ? undefined : "_blank"} className="link-card flex items-center p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl hover:bg-white/[0.07] transition-all">
-                                    <Icon className="w-5 h-5 mr-4 text-zinc-400" />
+                                    {isCustomIcon ? (
+                                        <img src={link.icon} alt="Icon" className="w-5 h-5 mr-4 object-contain rounded-sm" />
+                                    ) : (
+                                        <Icon className="w-5 h-5 mr-4 text-zinc-400" />
+                                    )}
                                     <span className="text-sm font-semibold tracking-tight text-white">{link.name}</span>
                                 </Link>
                             );
