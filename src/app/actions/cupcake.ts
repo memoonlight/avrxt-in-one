@@ -127,7 +127,7 @@ export async function getRecentTips() {
     const supabase = await createClient();
     const { data } = await supabase
         .from('cupcake_tips')
-        .select('user_name, created_at')
+        .select('user_name, created_at, amount')
         .order('created_at', { ascending: false })
         .limit(5);
     return data || [];

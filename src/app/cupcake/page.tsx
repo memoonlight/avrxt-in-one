@@ -3,6 +3,7 @@ import CupcakeForm from './CupcakeForm';
 import Reveal from '@/components/Reveal';
 import SpotlightBox from '@/components/SpotlightBox';
 import { Coffee, Heart, User, Clock } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default async function CupcakePage() {
     const recentTips = await getRecentTips();
@@ -41,19 +42,31 @@ export default async function CupcakePage() {
 
                         <div className="space-y-6">
                             {recentTips.length > 0 ? (
-                                recentTips.map((tip, idx) => (
-                                    <div key={idx} className="flex items-center gap-4 group">
-                                        <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-500 group-hover:border-white/20 transition-all">
-                                            <User size={16} />
+                                recentTips.map((tip: any, idx: number) => {
+                                    const maxAmount = Math.max(...recentTips.map((t: any) => t.amount), 0);
+                                    const isTop = tip.amount === maxAmount && maxAmount > 0;
+                                    return (
+                                        <div key={idx} className="flex items-center gap-4 group">
+                                            <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-500 group-hover:border-white/20 transition-all">
+                                                <User size={16} />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={cn(
+                                                        "text-sm font-bold uppercase tracking-tight",
+                                                        isTop ? "bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent" : "text-white"
+                                                    )}>
+                                                        {tip.user_name}
+                                                    </span>
+                                                    <span className="px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-xs font-bold text-purple-300">₹{tip.amount}</span>
+                                                </div>
+                                                <span className="text-[9px] font-mono text-zinc-600 uppercase">
+                                                    {new Date(tip.created_at).toLocaleDateString()} // VERIFIED
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-sm font-bold text-white uppercase tracking-tight">{tip.user_name}</span>
-                                            <span className="text-[9px] font-mono text-zinc-600 uppercase">
-                                                {new Date(tip.created_at).toLocaleDateString()} // VERIFIED
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))
+                                    );
+                                })
                             ) : (
                                 <div className="text-center py-10 border border-dashed border-white/5 rounded-2xl">
                                     <p className="text-[10px] font-mono uppercase text-zinc-700 tracking-widest">No transmissions yet_</p>
