@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { createRazorpayOrder, verifyPaymentAndBook } from '@/app/actions/cloud';
 import { Loader2, ArrowRight, ShieldCheck, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 export default function BookingForm({ service }: { service: any }) {
@@ -232,8 +233,14 @@ export default function BookingForm({ service }: { service: any }) {
                     )}
                 </button>
 
-                <div className="flex items-center justify-center gap-2 text-zinc-600 text-[9px] uppercase tracking-widest">
-                    <ShieldCheck className="w-3 h-3" /> Secure Transaction SSL/TLS
+                <div className="space-y-4">
+                    <div className="flex items-center justify-center gap-2 text-zinc-600 text-[9px] uppercase tracking-widest">
+                        <ShieldCheck className="w-3 h-3" /> Secure Transaction SSL/TLS
+                    </div>
+                    <p className="text-[9px] text-zinc-700 uppercase tracking-widest leading-relaxed text-center px-4">
+                        By proceeding, you agree to our <Link href="/terms" className="text-zinc-500 hover:text-white underline underline-offset-4">Terms</Link> and <Link href="/refund" className="text-zinc-500 hover:text-white underline underline-offset-4">Refund Policy</Link>. <br />
+                        Payments are non-refundable after project initiation.
+                    </p>
                 </div>
             </form>
         </>

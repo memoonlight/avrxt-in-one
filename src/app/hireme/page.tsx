@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Layout, Database, BrainCircuit, ShieldCheck, UploadCloud } from 'lucide-react';
+import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import { cn } from '@/lib/utils';
 
@@ -172,6 +173,11 @@ export default function HireMe() {
                     >
                         {isSubmitting ? 'UPLOADING...' : 'Transmit_Intake_Data_'} <UploadCloud className="w-4 h-4" />
                     </button>
+
+                    <p className="mt-8 text-[9px] text-zinc-600 uppercase tracking-widest leading-relaxed text-center px-4">
+                        By transmitting, you agree to our <Link href="/terms" className="text-zinc-500 hover:text-white underline underline-offset-4">Terms</Link> and <Link href="/privacy" className="text-zinc-500 hover:text-white underline underline-offset-4">Privacy Policy</Link>. <br />
+                        Submitted data is processed securely through our internal API.
+                    </p>
                 </form>
             </Reveal>
         </main>

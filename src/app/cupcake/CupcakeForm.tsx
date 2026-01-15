@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
+import Link from 'next/link';
 import { createTipOrder, verifyTipAndSave } from '@/app/actions/cupcake';
 import { Loader2, Heart, Send, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -170,6 +171,11 @@ export default function CupcakeForm() {
                         </>
                     )}
                 </button>
+
+                <p className="mt-8 text-[9px] text-zinc-600 uppercase tracking-widest leading-relaxed text-center">
+                    By proceeding, you agree to our <Link href="/terms" className="text-zinc-500 hover:text-white underline underline-offset-4">Terms</Link> and <Link href="/refund" className="text-zinc-500 hover:text-white underline underline-offset-4">Refund Policy</Link>. <br />
+                    All digital contributions are non-refundable. Secure 256-bit SSL encrypted transmission.
+                </p>
             </form>
         </Reveal>
     );
