@@ -7,9 +7,10 @@ interface RevealProps {
     children: React.ReactNode;
     className?: string;
     id?: string;
+    style?: React.CSSProperties;
 }
 
-export default function Reveal({ children, className, id }: RevealProps) {
+export default function Reveal({ children, className, id, style }: RevealProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [isOut, setIsOut] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
@@ -47,6 +48,7 @@ export default function Reveal({ children, className, id }: RevealProps) {
         <div
             id={id}
             ref={ref}
+            style={style}
             className={cn("reveal", isVisible && "active", isOut && "out", className)}
         >
             {children}
