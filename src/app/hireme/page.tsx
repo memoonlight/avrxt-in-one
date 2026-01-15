@@ -6,6 +6,12 @@ import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import { cn } from '@/lib/utils';
 
+// Metadata is not allowed in Client Components, but we can set it via a side-file or document head.
+// However, in Next.js App Router, for client pages we usually use a separate layout or head component if we want dynamic.
+// But for static SEO, we can just use the title tag in the component if needed, or wrap it in a Server Layout.
+// Actually, I'll create a layout.tsx for hireme if it doesn't exist to set the metadata there.
+
+
 export default function HireMe() {
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalWeeks, setTotalWeeks] = useState(0);

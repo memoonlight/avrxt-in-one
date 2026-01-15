@@ -2,6 +2,13 @@ import Link from 'next/link';
 import { Cloud, Zap, Globe, Smartphone, Code2, Bot, Layers, ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import SpotlightBox from '@/components/SpotlightBox';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Premium Cloud Engineering & Solutions | avrxt',
+    description: 'Scalable, high-performance services including Web Development, Discord Bot Architecture, API Design, and N8N Automation. Secure and enterprise-ready.',
+    keywords: ['cloud engineering', 'web development', 'discord bot development', 'n8n automation', 'rest api design', 'website maintenance'],
+};
 
 export const SERVICES = [
     {

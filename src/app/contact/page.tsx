@@ -60,8 +60,8 @@ export default function Contact() {
             <Reveal className="max-w-3xl mx-auto p-6 md:p-10 border border-zinc-800 bg-black/40 backdrop-blur-xl">
                 {formStatus.type && (
                     <div className={`mb-6 p-4 font-mono text-sm border ${formStatus.type === 'success'
-                            ? 'bg-green-900/10 text-green-400 border-green-900/50'
-                            : 'bg-red-900/10 text-red-400 border-red-900/50'
+                        ? 'bg-green-900/10 text-green-400 border-green-900/50'
+                        : 'bg-red-900/10 text-red-400 border-red-900/50'
                         }`}>
                         {formStatus.message}
                     </div>
@@ -119,7 +119,7 @@ export default function Contact() {
                     <Link href="https://github.com/Irshadcp" target="_blank" className="hover:text-white transition-colors">
                         <Github className="w-6 h-6" />
                     </Link>
-                    <Link href="mailto:hey@avrxt.in" className="hover:text-white transition-colors">
+                    <Link href="mailto:support@avrxt.in" className="hover:text-white transition-colors">
                         <Mail className="w-6 h-6" />
                     </Link>
                     <Link href="https://instagram.com/avr.me" target="_blank" className="hover:text-white transition-colors">

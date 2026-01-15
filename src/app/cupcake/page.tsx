@@ -4,6 +4,14 @@ import Reveal from '@/components/Reveal';
 import SpotlightBox from '@/components/SpotlightBox';
 import { Coffee, Heart, User, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Support avrxt | Buy Me a Cupcake',
+    description: 'Fuel the next iteration of open digital frontiers. Support avrxt by buying a cupcake and contributing to innovative tech projects.',
+    keywords: ['support developer', 'buy me a coffee', 'buy me a cupcake', 'avrxt support', 'tech innovation funding'],
+};
+
 
 export default async function CupcakePage() {
     const recentTips = await getRecentTips();

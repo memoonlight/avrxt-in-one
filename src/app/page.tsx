@@ -3,6 +3,19 @@ import { Layout, Server, Cpu, ShieldCheck, Activity, ArrowUpRight, ArrowRight, C
 import TypingText from '@/components/TypingText';
 import Reveal from '@/components/Reveal';
 import SpotlightBox from '@/components/SpotlightBox';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Building Scalable, Secure, & Beautiful Digital Solutions | avrxt",
+  description: "Specializing in Full Stack Development, AI Agentic Workflows, and Custom Cloud Solutions. Over 50+ projects shipped with focus on security and performance.",
+  keywords: ["Full Stack Developer", "AI Automation", "React Developer", "Next.js Expert", "Cloud Solutions", "Software Engineer India"],
+  openGraph: {
+    title: "avrxt | Infrastructure & Engineering",
+    description: "Building the next generation of digital infrastructure.",
+    type: "website",
+    url: "https://avrxt.in",
+  }
+};
 
 export default function Home() {
   return (

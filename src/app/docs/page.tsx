@@ -3,6 +3,14 @@ import { BookOpen, ArrowRight, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getPublishedDocs } from '@/app/actions/docs';
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Technical Library & Documentation | avrxt',
+    description: 'Explore in-depth technical guides, architectural deep dives, and performance optimization tutorials by avrxt.',
+    keywords: ['technical documentation', 'coding tutorials', 'system architecture', 'software engineering guides', 'avrxt library'],
+};
+
 export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function Docs() {

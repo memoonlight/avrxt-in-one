@@ -5,8 +5,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-    title: 'Guestbook | avrxt',
-    description: 'Leave a message for the community.',
+    title: 'Guestbook | avrxt Node',
+    description: 'Leave a permanent footprint in our community guestbook. Shared words from the digital frontier.',
+    keywords: ['guestbook', 'avrxt community', 'digital footprint', 'developer messages'],
 };
 
 export default async function GuestbookPage() {
