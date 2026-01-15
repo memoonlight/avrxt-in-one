@@ -1,61 +1,73 @@
 import Link from 'next/link';
-import { Cloud, Zap, Globe, Smartphone, Code2, Bot, Layers, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Cloud, Zap, Globe, Smartphone, Code2, Bot, Layers, ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import SpotlightBox from '@/components/SpotlightBox';
 
 export const SERVICES = [
     {
-        id: 'static-web',
-        title: 'Static Website',
-        price: '₹5,999',
+        id: 'web-dev',
+        title: 'Web Development',
         iconName: 'Globe',
-        description: '3–5 pages, responsive, basic SEO, 7 days support',
-        features: ['3-5 Pages Layout', 'Responsive Design', 'Basic SEO', '7 Days Support', 'Static Hosting Setup']
+        description: 'Building modern, high-speed digital presences tailored for performance.',
+        variants: [
+            { id: 'static', name: 'Static Website', price: 5999, features: ['3-5 Pages', 'Basic SEO', 'Responsive', '7 Days Support'] },
+            { id: 'fullstack', name: 'Full Stack Website', price: 24999, features: ['Custom Auth', 'Database', 'API Logic', 'Deployment Help'] }
+        ]
     },
     {
-        id: 'fullstack-web',
-        title: 'Full Stack Website',
-        price: '₹24,999',
-        iconName: 'Layers',
-        description: 'Auth, database, API integration, deployment support',
-        features: ['Custom Auth System', 'Database Integration', 'API Development', 'Deployment Help', 'Scalable Arch']
-    },
-    {
-        id: 'bot-basic',
-        title: 'Discord Bot (Basic)',
-        price: '₹3,999',
+        id: 'bot-dev',
+        title: 'Discord Bot Development',
         iconName: 'Bot',
-        description: 'Commands, moderation, logging',
-        features: ['Custom Commands', 'Moderation Pack', 'Logging System', 'Node.js/Python', '24/7 Support']
-    },
-    {
-        id: 'bot-advanced',
-        title: 'Discord Bot (Advanced)',
-        price: '₹9,999',
-        iconName: 'Code2',
-        description: 'Dashboard, DB integration, API, hosting setup',
-        features: ['Web Dashboard', 'Database Logic', 'External API', 'Hosting Setup', 'Advanced Logic']
+        description: 'Custom automation for your community. From basic moderation to complex dashboards.',
+        variants: [
+            { id: 'normal', name: 'Normal Bot', price: 3999, features: ['Moderation', 'Commands', 'Logging'] },
+            { id: 'advanced', name: 'Advanced Bot', price: 9999, features: ['Web Dashboard', 'DB Integration', 'API Connect'] },
+            { id: 'custom', name: 'Custom Architecture', price: 0, features: ['Complex Logic', 'Neural Integrations', 'Price on Request'] }
+        ]
     },
     {
         id: 'api-dev',
-        title: 'Custom API',
-        price: '₹6,999',
+        title: 'API Development',
         iconName: 'Zap',
-        description: 'REST API, authentication, documentation',
-        features: ['REST Architecture', 'Secure Auth', 'API Docs', 'Performance Optimized', 'Scale Ready']
+        description: 'Secure, scalable RESTful backend systems for your apps.',
+        variants: [
+            { id: 'standard', name: 'REST API', price: 6999, features: ['Authentication', 'CRUD Operations', 'Documentation', 'Scale Ready'] }
+        ]
     },
     {
         id: 'n8n-auto',
         title: 'N8N Automation',
-        price: '₹4,999',
         iconName: 'Cloud',
-        description: 'Workflow design, API/webhook, testing & handover',
-        features: ['Workflow Design', 'Webhook Setup', 'Testing Phase', 'Full Handover', 'Automation Logic']
+        description: 'Streamline your workflows with powerful low-code automation.',
+        variants: [
+            { id: 'standard', name: 'Workflow Logic', price: 4999, features: ['Webhook Integration', 'Workflow Design', 'Testing', 'Handover'] }
+        ]
+    },
+    {
+        id: 'redesign',
+        title: 'Website Re-Design',
+        iconName: 'Layers',
+        description: 'Give your existing platform a professional UI/UX makeover.',
+        variants: [
+            { id: 'basic', name: 'Basic UI Refresh', price: 4999, features: ['Color/Font Sync', 'Mobile Fix', 'Minor Layout Changes'] },
+            { id: 'advanced', name: 'Advanced Overhaul', price: 9999, features: ['Animation Sync', 'Performance Fix', 'SEO Re-structure'] },
+            { id: 'full', name: 'Full Re-Design', price: 0, features: ['Structural Rebuild', 'New Tech Stack', 'Price on Request'] }
+        ]
+    },
+    {
+        id: 'maintenance',
+        title: 'Website Maintenance',
+        iconName: 'ShieldCheck',
+        description: 'Keep your systems running 24/7 with professional upkeep.',
+        variants: [
+            { id: 'basic', name: 'Basic Care', price: 4999, features: ['Uptime Monitoring', 'Minor Bug Fixes', 'Content Updates', 'Monthly Backup'] },
+            { id: 'pro', name: 'Enterprise Management', price: 12999, features: ['Security Hardening', 'Weekly Backup', 'Priority Support', 'API Monitoring'] }
+        ]
     }
 ];
 
 const iconMap: Record<string, any> = {
-    Globe, Layers, Bot, Code2, Zap, Cloud
+    Globe, Layers, Bot, Code2, Zap, Cloud, ShieldCheck
 };
 
 export default function CloudPage() {
@@ -87,14 +99,17 @@ export default function CloudPage() {
                                         </div>
 
                                         <h3 className="text-xl font-bold text-white mb-2">{service.title}</h3>
-                                        <div className="text-2xl font-black text-white mb-4">{service.price} <span className="text-xs font-mono text-zinc-600">STARTING</span></div>
+                                        <div className="text-2xl font-black text-white mb-4">
+                                            {service.variants[0].price > 0 ? `₹${service.variants[0].price.toLocaleString()}` : "Contact"}
+                                            <span className="text-xs font-mono text-zinc-600"> {service.variants.length > 1 ? 'STARTING' : ''}</span>
+                                        </div>
 
                                         <p className="text-zinc-500 text-sm mb-8 leading-relaxed">
                                             {service.description}
                                         </p>
 
                                         <ul className="space-y-3 mb-8 flex-grow">
-                                            {service.features.map(f => (
+                                            {service.variants[0].features.slice(0, 4).map((f: string) => (
                                                 <li key={f} className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-zinc-600">
                                                     <CheckCircle2 className="w-3 h-3 text-zinc-800" /> {f}
                                                 </li>

@@ -6,7 +6,7 @@ import BookingForm from './BookingForm';
 import { CheckCircle2, ShieldCheck, Zap, Laptop, Globe, Layers, Bot, Code2, Cloud } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
-    Globe, Layers, Bot, Code2, Zap, Cloud
+    Globe, Layers, Bot, Code2, Zap, Cloud, ShieldCheck
 };
 
 export async function generateStaticParams() {
@@ -59,7 +59,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                     <div className="space-y-4">
                         <h3 className="text-xs font-mono uppercase tracking-[0.3em] text-zinc-600 mb-6">// Specifications</h3>
                         <div className="space-y-3">
-                            {service.features.map(f => (
+                            {service.variants[0].features.map((f: string) => (
                                 <div key={f} className="flex items-center gap-4 p-4 rounded-xl border border-white/5 bg-white/[0.01]">
                                     <CheckCircle2 className="w-4 h-4 text-zinc-500" />
                                     <span className="text-sm font-medium text-zinc-300">{f}</span>
