@@ -8,7 +8,7 @@ export const SERVICES = [
         id: 'static-web',
         title: 'Static Website',
         price: '₹5,999',
-        icon: Globe,
+        iconName: 'Globe',
         description: '3–5 pages, responsive, basic SEO, 7 days support',
         features: ['3-5 Pages Layout', 'Responsive Design', 'Basic SEO', '7 Days Support', 'Static Hosting Setup']
     },
@@ -16,7 +16,7 @@ export const SERVICES = [
         id: 'fullstack-web',
         title: 'Full Stack Website',
         price: '₹24,999',
-        icon: Layers,
+        iconName: 'Layers',
         description: 'Auth, database, API integration, deployment support',
         features: ['Custom Auth System', 'Database Integration', 'API Development', 'Deployment Help', 'Scalable Arch']
     },
@@ -24,7 +24,7 @@ export const SERVICES = [
         id: 'bot-basic',
         title: 'Discord Bot (Basic)',
         price: '₹3,999',
-        icon: Bot,
+        iconName: 'Bot',
         description: 'Commands, moderation, logging',
         features: ['Custom Commands', 'Moderation Pack', 'Logging System', 'Node.js/Python', '24/7 Support']
     },
@@ -32,7 +32,7 @@ export const SERVICES = [
         id: 'bot-advanced',
         title: 'Discord Bot (Advanced)',
         price: '₹9,999',
-        icon: Code2,
+        iconName: 'Code2',
         description: 'Dashboard, DB integration, API, hosting setup',
         features: ['Web Dashboard', 'Database Logic', 'External API', 'Hosting Setup', 'Advanced Logic']
     },
@@ -40,7 +40,7 @@ export const SERVICES = [
         id: 'api-dev',
         title: 'Custom API',
         price: '₹6,999',
-        icon: Zap,
+        iconName: 'Zap',
         description: 'REST API, authentication, documentation',
         features: ['REST Architecture', 'Secure Auth', 'API Docs', 'Performance Optimized', 'Scale Ready']
     },
@@ -48,11 +48,15 @@ export const SERVICES = [
         id: 'n8n-auto',
         title: 'N8N Automation',
         price: '₹4,999',
-        icon: Cloud,
+        iconName: 'Cloud',
         description: 'Workflow design, API/webhook, testing & handover',
         features: ['Workflow Design', 'Webhook Setup', 'Testing Phase', 'Full Handover', 'Automation Logic']
     }
 ];
+
+const iconMap: Record<string, any> = {
+    Globe, Layers, Bot, Code2, Zap, Cloud
+};
 
 export default function CloudPage() {
     return (
@@ -72,7 +76,7 @@ export default function CloudPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {SERVICES.map((service, idx) => {
-                    const Icon = service.icon;
+                    const Icon = iconMap[service.iconName] || Globe;
                     return (
                         <Reveal key={service.id} style={{ transitionDelay: `${idx * 0.1}s` }}>
                             <Link href={`/cloud/${service.id}`} className="block group h-full">

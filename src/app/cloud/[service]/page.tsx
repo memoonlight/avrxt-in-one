@@ -3,7 +3,11 @@ import { SERVICES } from '../page';
 import Reveal from '@/components/Reveal';
 import SpotlightBox from '@/components/SpotlightBox';
 import BookingForm from './BookingForm';
-import { CheckCircle2, ShieldCheck, Zap, Laptop } from 'lucide-react';
+import { CheckCircle2, ShieldCheck, Zap, Laptop, Globe, Layers, Bot, Code2, Cloud } from 'lucide-react';
+
+const iconMap: Record<string, any> = {
+    Globe, Layers, Bot, Code2, Zap, Cloud
+};
 
 export async function generateStaticParams() {
     return SERVICES.map((service) => ({
@@ -19,7 +23,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
         notFound();
     }
 
-    const Icon = service.icon;
+    const Icon = iconMap[service.iconName] || Globe;
 
     return (
         <main className="max-w-6xl mx-auto px-6 py-32">
