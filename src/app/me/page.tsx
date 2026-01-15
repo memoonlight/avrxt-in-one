@@ -4,9 +4,9 @@ import MeClient from './MeClient';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Irshad CP (avrxt) | Portfolio & Links',
-    description: 'Explore the personal profile, creative work, and social footprints of Irshad CP, also known as avrxt.',
-    keywords: ['Irshad CP', 'avrxt', 'developer portfolio', 'tech personality', 'creative engineering'],
+    title: ' (avrxt) | Portfolio & Links',
+    description: 'Explore the personal profile, creative work, and social footprints of aviorxt, also known as avrxt.',
+    keywords: ['aviorxt', 'avrxt', 'developer portfolio', 'tech personality', 'creative engineering'],
 };
 
 export const revalidate = 60; // Revalidate data every 60 seconds
