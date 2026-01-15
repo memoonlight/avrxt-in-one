@@ -125,7 +125,13 @@ The system follows a **"Dark Mesh"** design language:
 ---
 
 ## 📝 License & Contact
-Proprietary and Confidential.  
+**PROPRIETARY & CONFIDENTIAL**  
+Copyright © 2026 **@avrxt**. All rights reserved.
+
+This project is strictly for the exclusive use of **@avrxt**. Unauthorized copying, modification, distribution, or any form of reproduction of this project (source code, design, or architecture) without express written permission is a violation of international intellectual property laws.
+
+⚠️ **LEGAL NOTICE**: Any unauthorized usage or duplication of this project will lead to immediate **legal action**.
+
 **Developer**: [@avrxt](https://instagram.com/aviorxt) | [support@avrxt.in](mailto:support@avrxt.in)
 
 *Last Updated: January 15, 2026*
