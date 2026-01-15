@@ -20,6 +20,7 @@ export default function Navbar() {
         { name: '/skills', href: '/#expertise' },
         { name: '/projects', href: '/#projects' },
         { name: '/cloud', href: '/cloud' },
+        { name: '/cupcake', href: '/cupcake' },
         { name: '/biz', href: '/#solutions' },
     ];
 
