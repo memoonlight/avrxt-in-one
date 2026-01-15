@@ -16,6 +16,6 @@ export default function robots(): MetadataRoute.Robots {
                 '/private/',
             ],
         },
-        sitemap: 'https://avrxt.in/sitemap.xml',
+        sitemap: 'https://www.avrxt.in/sitemap.xml',
     };
 }

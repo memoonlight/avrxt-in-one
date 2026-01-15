@@ -2,7 +2,7 @@ import { SERVICES } from './cloud/page';
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://avrxt.in';
+    const baseUrl = 'https://www.avrxt.in';
 
     // Base pages
     const staticPages = [
