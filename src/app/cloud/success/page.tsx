@@ -1,6 +1,14 @@
 import Link from 'next/link';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import Reveal from '@/components/Reveal';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
 
 export default function SuccessPage() {
     return (

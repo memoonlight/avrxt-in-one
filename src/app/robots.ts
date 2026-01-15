@@ -5,7 +5,16 @@ export default function robots(): MetadataRoute.Robots {
         rules: {
             userAgent: '*',
             allow: '/',
-            disallow: ['/me/admin', '/api/'],
+            disallow: [
+                '/me/admin',
+                '/docs/admin',
+                '/api/',
+                '/auth/',
+                '/cloud/success',
+                '/login',
+                '/_next/',
+                '/private/',
+            ],
         },
         sitemap: 'https://avrxt.in/sitemap.xml',
     };
