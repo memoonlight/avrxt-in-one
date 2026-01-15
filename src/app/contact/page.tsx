@@ -116,7 +116,7 @@ export default function Contact() {
 
             <div className="mt-24 text-center">
                 <div className="flex justify-center gap-8 text-zinc-500 transition-all">
-                    <Link href="https://github.com/Irshadcp" target="_blank" className="hover:text-white transition-colors">
+                    <Link href="https://github.com/avrxt" target="_blank" className="hover:text-white transition-colors">
                         <Github className="w-6 h-6" />
                     </Link>
                     <Link href="mailto:support@avrxt.in" className="hover:text-white transition-colors">
